@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication
+    xmlns:mx="http://www.adobe.com/2006/mxml"
+    title="as3ircclient"
+    width="700"
+    height="500"
+    paddingTop="5"
+    paddingLeft="5"
+    paddingRight="5"
+    paddingBottom="5"
+    backgroundGradientColors="[0x0099cc, 0x006666]"
+    creationComplete="start();"
+    layout="vertical"
+    >
+    <mx:Script>
+    <![CDATA[
+
+    import org.coderepos.net.irc.IRCChannel;
+
+    private function start():void
+    {
+        DemoApp.app.rootWindow = this;
+    }
+
+    public function logLine(line:String):void
+    {
+        logView.text += line + "\n";
+    }
+
+    public function log(s:String):void
+    {
+        logView.text += s;
+    }
+
+    public function addChannel():void
+    {
+        var chName:String = channelName.text;
+        DemoApp.app.addChannel(chName);
+        channelName.text = "";
+    }
+
+    public function changeSession():void
+    {
+        var ch:IRCChannel = IRCChannel(sessions.selectedItem);
+        var c:DemoConversation = DemoConversation(ch.getAttribute("conversation"));
+        var m:DemoMemberList   = DemoMemberList(ch.getAttribute("members"));
+        conversationViewStack.selectedChild = c;
+        memberViewStack.selectedChild = m;
+    }
+
+    ]]>
+    </mx:Script>
+
+    <mx:HBox width="100%" height="100%">
+
+    <mx:VBox width="130" height="100%">
+    <mx:Button label="Setting" click="DemoApp.app.openSettingWindow();"/>
+    <mx:Button label="Connect" click="DemoApp.app.connect();"/>
+    <mx:Button label="Close" click="DemoApp.app.disconnect();"/>
+    <mx:TextInput id="channelName"/>
+    <mx:Button label="Add Channel" click="addChannel();"/>
+    </mx:VBox>
+
+    <mx:HDividedBox width="100%" height="100%">
+        <mx:VDividedBox width="70%" height="100%">
+            <mx:Panel title="Conversation" width="100%" height="70%">
+            <mx:ViewStack id="conversationViewStack" width="100%" height="100%">
+            </mx:ViewStack>
+            </mx:Panel>
+            <mx:Panel title="Log" width="100%" height="30%">
+                <mx:TextArea id="logView" width="100%" height="100%" text="" editable="false"/>
+            </mx:Panel>
+        </mx:VDividedBox>
+        <mx:VDividedBox width="30%" height="100%">
+            <mx:Panel title="Users" width="100%" height="60%">
+            <mx:ViewStack id="memberViewStack" width="100%" height="100%"/>
+            </mx:Panel>
+            <mx:Panel title="Channels" width="100%" height="40%" backgroundAlpha="1">
+                <mx:List id="sessions" width="100%" height="100%" change="changeSession();">
+                </mx:List>
+            </mx:Panel>
+        </mx:VDividedBox>
+    </mx:HDividedBox>
+    </mx:HBox>
+</mx:WindowedApplication>
+

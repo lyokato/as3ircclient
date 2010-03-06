@@ -1,0 +1,7 @@
+TODO
+
+- Validation for all messages when received from server.
+- CTCP handling
+- DCC handling
+- remake event model
+
